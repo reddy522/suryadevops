@@ -1,0 +1,67 @@
+  $kubectl get pods
+  $kubectl get nodes
+  $vi nginx.yml
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: nginx
+spec:
+  replicas: 3
+  selector:
+    app: nginx
+  template:
+    metadata:
+      name: nginx
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx
+        ports:
+        - containerPort: 80
+   
+$ kubectl create -f nginx.yml
+$ kubectl get pods
+
+[root@ip-172-31-27-78 centos]# kubectl get pods -o wide
+NAME          READY   STATUS    RESTARTS   AGE     IP                NODE                            NOMINATED NODE   READINESS GATES
+nginx-8bbx4   1/1     Running   0          4m9s    192.168.225.132   ip-172-31-23-173.ec2.internal   <none>           <none>
+nginx-fkb4l   1/1     Running   0          5m57s   192.168.225.130   ip-172-31-23-173.ec2.internal   <none>           <none>
+nginx-jgjct   1/1     Running   0          5m57s   192.168.225.131   ip-172-31-23-173.ec2.internal   <none>           <none>
+
+
+$ kubectl delete pod nginx-9cjs9
+$ kubectl get pods -o wide
+
+[root@ip-172-31-27-78 centos]# kubectl get pods -o wide
+NAME          READY   STATUS    RESTARTS   AGE    IP                NODE                            NOMINATED NODE   READINESS GATES
+nginx-8bbx4   1/1     Running   0          10s    192.168.225.132   ip-172-31-23-173.ec2.internal   <none>           <none>
+nginx-fkb4l   1/1     Running   0          118s   192.168.225.130   ip-172-31-23-173.ec2.internal   <none>           <none>
+nginx-jgjct   1/1     Running   0          118s   192.168.225.131   ip-172-31-23-173.ec2.internal   <none>           <none>
+
+[root@ip-172-31-27-78 centos]# kubectl get rc
+NAME    DESIRED   CURRENT   READY   AGE
+nginx   3         3         3       12m
+
+
+[root@ip-172-31-27-78 centos]# kubectl scale rc nginx --replicas=5
+replicationcontroller/nginx scaled
+[root@ip-172-31-27-78 centos]# kubectl get pods -o wide
+NAME          READY   STATUS    RESTARTS   AGE   IP                NODE                            NOMINATED NODE   READINESS GATES
+nginx-8bbx4   1/1     Running   0          12m   192.168.225.132   ip-172-31-23-173.ec2.internal   <none>           <none>
+nginx-fkb4l   1/1     Running   0          14m   192.168.225.130   ip-172-31-23-173.ec2.internal   <none>           <none>
+nginx-jgjct   1/1     Running   0          14m   192.168.225.131   ip-172-31-23-173.ec2.internal   <none>           <none>
+nginx-vnrfw   1/1     Running   0          19s   192.168.225.133   ip-172-31-23-173.ec2.internal   <none>           <none>
+nginx-z6892   1/1     Running   0          19s   192.168.225.134   ip-172-31-23-173.ec2.internal   <none>           <none>
+
+
+[root@ip-172-31-27-78 centos]# kubectl get rc
+NAME    DESIRED   CURRENT   READY   AGE
+nginx   5         5         5       18m
+[root@ip-172-31-27-78 centos]# kubectl edit rc nginx   {edit replicas inside...i given 2 replicas}
+replicationcontroller/nginx edited
+[root@ip-172-31-27-78 centos]# kubectl get pods
+NAME          READY   STATUS    RESTARTS   AGE
+nginx-fkb4l   1/1     Running   0          19m
+nginx-jgjct   1/1     Running   0          19m

@@ -1,0 +1,42 @@
+    1  yum -y install java-1.8.0-openjdk
+    2  java -version
+    3  cd /opt
+    4  wget https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.53/bin/apache-tomcat-9.0.53.zip
+    5  ll
+    6  unzip apache-tomcat-9.0.53.zip
+    7  ll
+    8  cd apache-tomcat-9.0.53
+    9  ll
+   10  cd bin
+   11  ll
+   12  chmod u+x *.sh
+   13  ll
+   14  cd ..
+   15  ln -s /opt/apache-tomcat-9.0.53/bin/startup.sh /usr/bin/startTomcat
+   16  ln -s /opt/apache-tomcat-9.0.53/bin/shutdown.sh /usr/bin/stopTomcat
+   17  startTomcat
+   18  ll
+   19  ls
+   20  cd webapps
+   21  ls
+   22  cd manager
+   23  ls
+   24  cd META-INF
+   25  ls
+   26  vi context.xml  *** comment here 
+                             true downside & manager upside
+                             <!--      -->
+            
+
+   27  stopTomcat
+   28  startTomcat
+   29  cd ..
+   30  cd ..
+   31  cvd ..
+   32  cd ..
+   33  ls
+   34  cd conf
+   35  ls
+   36  vi tomcat-users.xml  *** add this line last line before
+                               <user username="surya" password="surya" roles="admin-gui,manager-gui"/>
+
